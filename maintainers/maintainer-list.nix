@@ -23739,6 +23739,11 @@
     github = "rster2002";
     githubId = 26026518;
   };
+  rswilli = {
+    name = "Wilhelm Bartel";
+    github = "RSWilli";
+    githubId = 18500203;
+  };
   rsynnest = {
     email = "contact@rsynnest.com";
     github = "rsynnest";

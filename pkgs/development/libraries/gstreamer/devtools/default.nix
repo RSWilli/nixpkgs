@@ -28,16 +28,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-devtools";
-  version = "1.26.11";
+  version = "1.28.2";
 
   outputs = [
     "out"
     "dev"
   ];
 
+  separateDebugInfo = true;
+
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-devtools/gst-devtools-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Vl9IU4jJSYr+v3gAQYPN/xATEhEoZBqlbtql6pRBK+I=";
+    hash = "sha256-jgEr3LVVA/Rm1T8fBeE+iZPGmBG523fNFqj2Rncjv5E=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -46,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
       cargoRoot
       ;
     name = "gst-devtools-${finalAttrs.version}";
-    hash = "sha256-sqN1IBkbrT3pQqUQKU2pr8G1t4kNMKk0NR7NH7dTvAE=";
+    hash = "sha256-5VYzDwAMyVN2HR/sS8rCwTR7UW/tt60AS7wZMjx+w74=";
   };
 
   depsBuildBuild = [
@@ -91,7 +93,10 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript =
       let
-        updateSource = directoryListingUpdater { };
+        updateSource = directoryListingUpdater {
+          # uneven versions like 1.29.1 are development snapshots
+          extraRegex = "\\d+\\.\\d+[02468].\\d+";
+        };
 
         updateLockfile = {
           command = [
@@ -125,6 +130,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gstreamer.freedesktop.org";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ tmarkus ];
+    maintainers = with lib.maintainers; [
+      rswilli
+      tmarkus
+    ];
   };
 })

@@ -27,16 +27,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-ugly";
-  version = "1.26.11";
+  version = "1.28.2";
 
   outputs = [
     "out"
     "dev"
   ];
 
+  separateDebugInfo = true;
+
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-${finalAttrs.version}.tar.xz";
-    hash = "sha256-v5yfcu43SCXP1DhowoW8sBcA3yWEBp51169FX+SCRPg=";
+    hash = "sha256-/jml7nEV433p62XYmeyEyT5uJu0//iXG1Rds7Oy6tXI=";
   };
 
   nativeBuildInputs = [
@@ -104,7 +106,10 @@ stdenv.mkDerivation (finalAttrs: {
       };
     };
 
-    updateScript = directoryListingUpdater { };
+    updateScript = directoryListingUpdater {
+      # uneven versions like 1.29.1 are development snapshots
+      extraRegex = "\\d+\\.\\d+[02468].\\d+";
+    };
   };
 
   meta = {
@@ -118,6 +123,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = if enableGplPlugins then lib.licenses.gpl2Plus else lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ tmarkus ];
+    maintainers = with lib.maintainers; [
+      rswilli
+      tmarkus
+    ];
   };
 })

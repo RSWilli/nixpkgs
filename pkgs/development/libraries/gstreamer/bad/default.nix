@@ -115,16 +115,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-bad";
-  version = "1.26.11";
+  version = "1.28.2";
 
   outputs = [
     "out"
     "dev"
   ];
 
+  separateDebugInfo = true;
+
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-${finalAttrs.version}.tar.xz";
-    hash = "sha256-EQ+4J5Xw5Wmx4nsSq5aZ01x3YuH/TblTNdasjRRCrz0=";
+    hash = "sha256-ZGfjlkgo9NfQi/4fu012KHocj6dmdOWeEBoUnAIP79c=";
   };
 
   patches = [
@@ -416,7 +418,10 @@ stdenv.mkDerivation (finalAttrs: {
       };
     };
 
-    updateScript = directoryListingUpdater { };
+    updateScript = directoryListingUpdater {
+      # uneven versions like 1.29.1 are development snapshots
+      extraRegex = "\\d+\\.\\d+[02468].\\d+";
+    };
   };
 
   meta = {
@@ -431,6 +436,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = if enableGplPlugins then lib.licenses.gpl2Plus else lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ tmarkus ];
+    maintainers = with lib.maintainers; [
+      rswilli
+      tmarkus
+    ];
   };
 })

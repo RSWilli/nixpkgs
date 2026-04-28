@@ -112,6 +112,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gstreamer.freedesktop.org";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ tmarkus ];
+    maintainers = with lib.maintainers; [
+      rswilli
+      tmarkus
+    ];
   };
 })
